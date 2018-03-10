@@ -325,8 +325,19 @@ function reinit(game)
 	        var ratio = element.maxSpeed / speed;
 	        element.velocity.x *= ratio;
 	        element.velocity.y *= ratio;
+	        
 	    }
+	    
+//	    socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "it", data: element.it});
+//    	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "x", data: element.x});
+//    	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "y", data: element.y});
+//    	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "vx", data: element.velocity.x});
+//    	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "vy", data: element.velocity.y});
 	});
+	
+	console.log("reinit done");
+	
+	
 }
 
 // the "main" code begins here
@@ -388,7 +399,7 @@ ASSET_MANAGER.downloadAll(function () {
     	//console.log("x should be: " + foo);
 	});
     
-    setTimeout(function(gameEngine)
+    setTimeout(function()
     {
     	 //circle1.it = foo;
     	    
@@ -413,7 +424,7 @@ ASSET_MANAGER.downloadAll(function () {
     	if(error)
     	{
     		console.log("Fixing errors");
-    		reinit();
+    		reinit(gameEngine);
     		error = false;
     	}
     	
