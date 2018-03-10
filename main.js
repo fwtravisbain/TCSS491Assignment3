@@ -2,30 +2,55 @@ var socket = io.connect("http://24.16.255.56:8888");
 
 var foo;
 loading = true;
+initialized = false;
 countloaded = 0;
+circle1 = null;
 
-socket.on("load", function (data, element) {
-    //return data;
-	
-	
-	
-	
-	console.log(data.data);
-	console.log("this data before:" + element);
-	console.log("changing to: " + data.data);
-	element = data.data;
-	console.log("this data after:" + element);
-	
-	
-	
-	
-//	countloaded++;
-//	if(countloaded == 12)
-//	{
-//		loading = false;
-//	}
-	//foo = data.data;
-	//console.log("inside foo is " + foo);
+tempit = [];
+tempx = [];
+tempy = [];
+tempvx = [];
+tempvy = [];
+
+count = 0;
+index = 0;
+
+socket.on("load", function (data) {
+	if(index == 5)
+	{
+		index = 0;
+		count++;
+	}
+	if(index == 0)
+	{
+		tempit[count] = data.data;
+		index++;
+	}
+	else if(index == 1)
+	{
+		tempx[count] = data.data;
+		index++;
+	}
+	else if(index == 2)
+	{
+		tempy[count] = data.data;
+		index++;
+	}
+	else if(index == 3)
+	{
+		tempvx[count] = data.data;
+		index++;
+	}
+	else if(index == 4)
+	{
+		tempvy[count] = data.data;
+		index++;
+	}
+	countloaded++;
+	if(countloaded == 5)
+	{
+		loading = false;
+	}
 });
 
 //socket.emit("save", { studentname: "Travis", statename: "aState", data: "Test Just Travis" });
@@ -109,11 +134,34 @@ Circle.prototype.collideBottom = function () {
 Circle.prototype.update = function () {
     Entity.prototype.update.call(this);
  //  console.log(this.velocity);
-
+    
     if(this.it)
     {
     	this.setIt();
     }
+    
+    if(this.game.space)
+    {
+    	console.out("pressed space");
+    	
+    	/*setZombie = false;
+    	
+    	circles.forEach(function(element)
+		{
+    		if(!setZombie)
+    		{
+    			this.setIt();
+    			setZombie = true;
+    		}
+    		else
+    		{
+    			this.setNotIt();
+    		}
+		});*/
+    	    	
+    }
+ 
+    
     
     this.x += this.velocity.x * this.game.clockTick;
     this.y += this.velocity.y * this.game.clockTick;
@@ -247,80 +295,6 @@ var friction = 1;
 var acceleration = 1000000;
 var maxSpeed = 200;
 
-var messages = [];
-var field = document.getElementById("field");
-var username = document.getElementById("username");
-var content = document.getElementById("content");
-
-socket.on("ping", function (ping) {
-    console.log(ping);
-    socket.emit("pong");
-});
-
-socket.on("sync", function (data) {
-    messages = data;
-    var html = '';
-    for (var i = 0; i < messages.length; i++) {
-        html += '<b>' + (messages[i].username ? messages[i].username : "Server") + ": </b>";
-        html += messages[i].message + "<br />";
-    }
-    content.innerHTML = html;
-    content.scrollTop = content.scrollHeight;
-    console.log("sync " + html);
-});
-
-socket.on("message", function (data) {
-    if (data.message) {
-        messages.push(data);
-        var html = '';
-        for (var i = 0; i < messages.length; i++) {
-            html += '<b>' + (messages[i].username ? messages[i].username : "Server") + ": </b>";
-            html += messages[i].message + "<br />";
-        }
-        content.innerHTML = html;
-        content.scrollTop = content.scrollHeight;
-    } else {
-        console.log("No message.");
-    }
-
-});
-
-
-socket.on("connect", function () {
-    console.log("Socket connected.")
-    
-    console.log("INITIAL VALUES");
-    
-    circles.forEach(function(element)
-	{
-    	console.log(element.it);
-    	console.log(element.x);
-    	console.log(element.y);
-    	console.log(element.velocity.x);
-    	console.log(element.velocity.y);
-    	
-    	
-    	
-    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "it"}, element.it);
-    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "x"}, element.x);
-    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "y"}, element.y);
-    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "vx"}, element.velocity.x);
-    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "vy"}, element.velocity.y);
-    	//console.log("x should be: " + foo);
-	});
-    
-    
-});
-socket.on("disconnect", function () {
-    console.log("Socket disconnected.")
-    
-    
-});
-socket.on("reconnect", function () {
-    console.log("Socket reconnected.")
-});
-
-
 var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./img/960px-Blank_Go_board.png");
@@ -338,6 +312,7 @@ ASSET_MANAGER.downloadAll(function () {
     var circle = new Circle(gameEngine);
     circle.setIt();
     circles.push(circle);
+    count++;
     gameEngine.addEntity(circle);
     for (var i = 0; i < 12; i++) {
         circle = new Circle(gameEngine);
@@ -345,10 +320,52 @@ ASSET_MANAGER.downloadAll(function () {
         count++;
         gameEngine.addEntity(circle);
         circles.push(circle);
+        circle1 = circle;
     }
     
     console.log("Circles made");
     
     gameEngine.init(ctx);
-    gameEngine.start();
+    
+
+    console.log("INITIAL VALUES");
+    
+    circles.forEach(function(element)
+	{
+//    	console.log(element.it);
+//    	console.log(element.x);
+//    	console.log(element.y);
+//    	console.log(element.velocity.x);
+//    	console.log(element.velocity.y);
+    	
+    	
+    	
+    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "it"});
+    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "x"});
+    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "y"});
+    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "vx"});
+    	socket.emit("load", { studentname: "TravisBain", statename: "Circle" + element.id + "vy"});
+    	//console.log("x should be: " + foo);
+	});
+    
+    setTimeout(function()
+    {
+    	 //circle1.it = foo;
+    	    
+    	 //console.log("circle1 it: " + circle1.it);
+    	
+    	circles.forEach(function(element)
+    	{
+    		element.it = tempit[element.id];
+    		element.x = tempx[element.id];
+    		element.y = tempy[element.id];
+    		element.vx = tempvx[element.id];
+    		element.vy = tempvy[element.id];
+    		
+    		console.log(element);
+    	});
+    	
+    	gameEngine.start();
+    }, 2500);
+    
 });

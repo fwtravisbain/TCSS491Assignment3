@@ -45,6 +45,58 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceHeight = this.ctx.canvas.height;
     this.startInput();
     this.timer = new Timer();
+    
+    var messages = [];
+    var field = document.getElementById("field");
+    var username = document.getElementById("username");
+    var content = document.getElementById("content");
+
+    socket.on("ping", function (ping) {
+        console.log(ping);
+        socket.emit("pong");
+    });
+
+    socket.on("sync", function (data) {
+        messages = data;
+        var html = '';
+        for (var i = 0; i < messages.length; i++) {
+            html += '<b>' + (messages[i].username ? messages[i].username : "Server") + ": </b>";
+            html += messages[i].message + "<br />";
+        }
+        content.innerHTML = html;
+        content.scrollTop = content.scrollHeight;
+        console.log("sync " + html);
+    });
+
+    socket.on("message", function (data) {
+        if (data.message) {
+            messages.push(data);
+            var html = '';
+            for (var i = 0; i < messages.length; i++) {
+                html += '<b>' + (messages[i].username ? messages[i].username : "Server") + ": </b>";
+                html += messages[i].message + "<br />";
+            }
+            content.innerHTML = html;
+            content.scrollTop = content.scrollHeight;
+        } else {
+            console.log("No message.");
+        }
+
+    });
+
+
+    socket.on("connect", function () {
+        console.log("Socket connected.")
+
+    });
+    socket.on("disconnect", function () {
+        console.log("Socket disconnected.")
+        
+    });
+    socket.on("reconnect", function () {
+        console.log("Socket reconnected.")
+    });
+    
     console.log('game initialized');
 }
 
@@ -61,6 +113,8 @@ GameEngine.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
 
+
+    
     var getXandY = function (e) {
         var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
         var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
@@ -68,31 +122,14 @@ GameEngine.prototype.startInput = function () {
         return { x: x, y: y };
     }
 
-    this.ctx.canvas.addEventListener("mousemove", function (e) {
-        //console.log(getXandY(e));
-        that.mouse = getXandY(e);
-    }, false);
-
-    this.ctx.canvas.addEventListener("click", function (e) {
-        //console.log(getXandY(e));
-        that.click = getXandY(e);
-    }, false);
-
-    this.ctx.canvas.addEventListener("wheel", function (e) {
-        //console.log(getXandY(e));
-        that.wheel = e;
-        //       console.log(e.wheelDelta);
-        e.preventDefault();
-    }, false);
-
-    this.ctx.canvas.addEventListener("contextmenu", function (e) {
-        //console.log(getXandY(e));
-        that.rightclick = getXandY(e);
+    this.ctx.canvas.addEventListener("keydown", function (e) {
+        if (String.fromCharCode(e.which) === ' ') that.space = true;
+//        console.log(e);
         e.preventDefault();
     }, false);
 
     console.log('Input started');
-}
+    }
 
 GameEngine.prototype.addEntity = function (entity) {
     console.log('added entity');
