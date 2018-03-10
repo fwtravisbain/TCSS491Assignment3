@@ -39,7 +39,8 @@ socket.on("load", function (data) {
 		tempy[count] = data.data
 	}
 	
-	
+	index++;
+	console.log("Loaded: " + index);
 	
 });
 
