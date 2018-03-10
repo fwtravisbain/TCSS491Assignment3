@@ -304,27 +304,27 @@ function reinit()
 	
 	circles.forEach(function(element)
 	{
-		this.id = countID;
+		element.id = countID;
 		countID++;
-	    this.player = 1;
-	    this.radius = 20;
-	    this.maxSpeed = 200;
-	    this.visualRadius = 500;
-	    this.colors = ["Red", "Green", "Blue", "White"];
-	    this.setNotIt();
+		element.player = 1;
+		element.radius = 20;
+		element.maxSpeed = 200;
+		element.visualRadius = 500;
+		element.colors = ["Red", "Green", "Blue", "White"];
+		element.setNotIt();
 	    if(!setFirst)
 	    {
-	    	this.setIt();
+	    	element.setIt();
 	    	setFirst = true;
 	    }
-	    Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
+	    Entity.call(element, game, element.radius + Math.random() * (800 - element.radius * 2), element.radius + Math.random() * (800 - element.radius * 2));
 
-	    this.velocity = { x: Math.random() * 1000, y: Math.random() * 1000 };
-	    var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
-	    if (speed > this.maxSpeed) {
-	        var ratio = this.maxSpeed / speed;
-	        this.velocity.x *= ratio;
-	        this.velocity.y *= ratio;
+	    element.velocity = { x: Math.random() * 1000, y: Math.random() * 1000 };
+	    var speed = Math.sqrt(element.velocity.x * element.velocity.x + element.velocity.y * element.velocity.y);
+	    if (speed > element.maxSpeed) {
+	        var ratio = element.maxSpeed / speed;
+	        element.velocity.x *= ratio;
+	        element.velocity.y *= ratio;
 	    }
 	});
 }
@@ -412,6 +412,7 @@ ASSET_MANAGER.downloadAll(function () {
     	
     	if(error)
     	{
+    		console.log("Fixing errors");
     		reinit();
     		error = false;
     	}
