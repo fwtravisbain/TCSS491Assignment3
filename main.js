@@ -135,6 +135,8 @@ Circle.prototype.update = function () {
     Entity.prototype.update.call(this);
  //  console.log(this.velocity);
     
+    var that = this;
+    
     if(this.it)
     {
     	this.setIt();
@@ -142,23 +144,30 @@ Circle.prototype.update = function () {
     
     if(this.game.space)
     {
-    	console.out("pressed space");
+    	console.log("pressed space");
     	
-    	/*setZombie = false;
+    	setZombie = false;
     	
     	circles.forEach(function(element)
 		{
     		if(!setZombie)
     		{
-    			this.setIt();
+    			element.setIt();
     			setZombie = true;
     		}
     		else
     		{
-    			this.setNotIt();
+    			element.setNotIt();
     		}
-		});*/
+    		
+    		socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "it", data: element.it});
+        	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "x", data: element.x});
+        	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "y", data: element.y});
+        	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "vx", data: element.velocity.x});
+        	socket.emit("save", { studentname: "TravisBain", statename: "Circle" + element.id + "vy", data: element.velocity.y});
+		});
     	    	
+    	this.game.space = false;
     }
  
     
