@@ -2,12 +2,17 @@
 var socket = io.connect("http://24.16.255.56:8888");
 
 socket.on("load", function (data) {
-    console.log(data);
+	if(data)
+	{
+		return data;
+	} else {
+        console.log("No data.");
+	}
 });
 
-socket.emit("save", { studentname: "Chris Marriott", statename: "aState", data: "Goodbye World" });
-socket.emit("load", { studentname: "Chris Marriott", statename: "aState" });
-socket.emit("load", { studentname: "Chris Marriott", statename: "theState" });
+//socket.emit("save", { studentname: "Travis", statename: "aState", data: "Test Just Travis" });
+//socket.emit("load", { studentname: "Travis Bain", statename: "aState" });
+//socket.emit("load", { studentname: "Chris Marriott", statename: "aState" });
 
 
 window.onload = function () {
@@ -49,7 +54,7 @@ window.onload = function () {
         }
 
     });
-
+    
     field.onkeydown = function (e) {
         if (e.keyCode === 13) {
             var text = field.value;
