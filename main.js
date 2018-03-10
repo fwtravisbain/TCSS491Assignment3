@@ -16,41 +16,31 @@ count = 0;
 index = 0;
 
 socket.on("load", function (data) {
-	if(index == 5)
+	
+	count = data.statename.match(/\d+/)[0];
+	if(data.statename.search("it") > -1)
 	{
-		index = 0;
-		count++;
+		tempit[count] = data.data
 	}
-	if(index == 0)
+	else if(data.statename.search("vx") > -1)
 	{
-		tempit[count] = data.data;
-		index++;
+		tempvx[count] = data.data
 	}
-	else if(index == 1)
+	else if(data.statename.search("vy") > -1)
 	{
-		tempx[count] = data.data;
-		index++;
+		tempvy[count] = data.data
 	}
-	else if(index == 2)
+	else if(data.statename.search("x") > -1)
 	{
-		tempy[count] = data.data;
-		index++;
+		tempx[count] = data.data
 	}
-	else if(index == 3)
+	else if(data.statename.search("y") > -1)
 	{
-		tempvx[count] = data.data;
-		index++;
+		tempy[count] = data.data
 	}
-	else if(index == 4)
-	{
-		tempvy[count] = data.data;
-		index++;
-	}
-	countloaded++;
-	if(countloaded == 5)
-	{
-		loading = false;
-	}
+	
+	
+	
 });
 
 //socket.emit("save", { studentname: "Travis", statename: "aState", data: "Test Just Travis" });
