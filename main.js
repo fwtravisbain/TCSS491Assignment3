@@ -356,11 +356,11 @@ ASSET_MANAGER.downloadAll(function () {
     	
     	circles.forEach(function(element)
     	{
-    		element.it = tempit[element.id];
-    		element.x = tempx[element.id];
-    		element.y = tempy[element.id];
-    		element.vx = tempvx[element.id];
-    		element.vy = tempvy[element.id];
+//    		element.it = tempit[element.id];
+//    		element.x = tempx[element.id];
+//    		element.y = tempy[element.id];
+//    		element.vx = tempvx[element.id];
+//    		element.vy = tempvy[element.id];
     		
     		console.log(element);
     	});
