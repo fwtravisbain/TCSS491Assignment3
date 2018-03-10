@@ -419,6 +419,6 @@ ASSET_MANAGER.downloadAll(function () {
     	}
     	
     	gameEngine.start();
-    }, 2500);
+    }, 3000);
     
 });
