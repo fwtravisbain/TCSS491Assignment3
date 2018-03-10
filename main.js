@@ -297,7 +297,37 @@ Circle.prototype.draw = function (ctx) {
 
 };
 
+function reinit()
+{
+	setFirst = false;
+	countID = 0;
+	
+	circles.forEach(function(element)
+	{
+		this.id = countID;
+		countID++;
+	    this.player = 1;
+	    this.radius = 20;
+	    this.maxSpeed = 200;
+	    this.visualRadius = 500;
+	    this.colors = ["Red", "Green", "Blue", "White"];
+	    this.setNotIt();
+	    if(!setFirst)
+	    {
+	    	this.setIt();
+	    	setFirst = true;
+	    }
+	    Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
 
+	    this.velocity = { x: Math.random() * 1000, y: Math.random() * 1000 };
+	    var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+	    if (speed > this.maxSpeed) {
+	        var ratio = this.maxSpeed / speed;
+	        this.velocity.x *= ratio;
+	        this.velocity.y *= ratio;
+	    }
+	});
+}
 
 // the "main" code begins here
 var friction = 1;
@@ -316,6 +346,7 @@ ASSET_MANAGER.downloadAll(function () {
     var ctx = canvas.getContext('2d');
 
     var count = 0;
+    var error = false;
 
     var gameEngine = new GameEngine();
     var circle = new Circle(gameEngine);
@@ -365,6 +396,11 @@ ASSET_MANAGER.downloadAll(function () {
     	
     	circles.forEach(function(element)
     	{
+    		if(isNaN(tempx[element.id]) || isNaN(tempy[element.id]))
+    		{
+    			error = true;
+    		}
+    		
     		element.it = tempit[element.id];
     		element.x = tempx[element.id];
     		element.y = tempy[element.id];
@@ -373,6 +409,12 @@ ASSET_MANAGER.downloadAll(function () {
     		
     		console.log(element);
     	});
+    	
+    	if(error)
+    	{
+    		reinit();
+    		error = false;
+    	}
     	
     	gameEngine.start();
     }, 2500);
