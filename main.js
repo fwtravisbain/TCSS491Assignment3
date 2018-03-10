@@ -297,7 +297,7 @@ Circle.prototype.draw = function (ctx) {
 
 };
 
-function reinit()
+function reinit(game)
 {
 	setFirst = false;
 	countID = 0;
@@ -388,7 +388,7 @@ ASSET_MANAGER.downloadAll(function () {
     	//console.log("x should be: " + foo);
 	});
     
-    setTimeout(function()
+    setTimeout(function(gameEngine)
     {
     	 //circle1.it = foo;
     	    
